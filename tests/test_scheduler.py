@@ -72,6 +72,53 @@ def test_boundary_snapshot_provider_removes_failed_promotion(tmp_path):
     assert not staged.exists()
 
 
+@pytest.mark.parametrize("wrapper", [None, "language_model", "_language_model"])
+@pytest.mark.parametrize("mtp_enabled", [False, True])
+def test_logprobs_follow_mtp_decode_setting(
+    mock_model, mock_tokenizer, wrapper, mtp_enabled
+):
+    """A retained VLM MTP head must not hide ordinary-decode logprobs."""
+    head_owner = SimpleNamespace(mtp=object(), _omlx_mtp_decode_enabled=mtp_enabled)
+    if wrapper is None:
+        mock_model.mtp = head_owner.mtp
+        mock_model._omlx_mtp_decode_enabled = mtp_enabled
+    else:
+        setattr(mock_model, wrapper, head_owner)
+        # The VLM adapter forwards the head, but the marker lives inside it.
+        mock_model.mtp = head_owner.mtp
+
+    scheduler = Scheduler(model=mock_model, tokenizer=mock_tokenizer)
+    request = Request(
+        request_id="logprobs-mtp",
+        prompt="classify",
+        prompt_token_ids=[1],
+        num_prompt_tokens=1,
+        status=RequestStatus.RUNNING,
+        batch_uid=99,
+        sampling_params=SamplingParams(max_tokens=2, logprobs=True, top_logprobs=2),
+    )
+    scheduler.running[request.request_id] = request
+    scheduler.requests[request.request_id] = request
+    scheduler.uid_to_request_id[99] = request.request_id
+    scheduler.request_id_to_uid[request.request_id] = 99
+    response = SimpleNamespace(
+        uid=99, token=0, finish_reason=None, logprobs=mx.log(mx.array([0.75, 0.25]))
+    )
+
+    outputs, _ = scheduler._process_batch_responses([response])
+
+    assert len(outputs) == 1
+    assert outputs[0].new_token_ids == [0]
+    if mtp_enabled:
+        assert outputs[0].logprobs is None
+    else:
+        entry = outputs[0].logprobs[0]
+        assert entry.token_id == 0
+        assert entry.top_ids == [0, 1]
+        assert entry.logprob == pytest.approx(-0.28768207)
+    assert response.logprobs is None
+
+
 class _ParserStopFactory:
     kind = "test"
     stop_token_ids = set()
