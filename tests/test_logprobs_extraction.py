@@ -1,7 +1,10 @@
 # SPDX-License-Identifier: Apache-2.0
 """Tests for engine-side per-token logprob extraction (#1549, Phase 2a)."""
 
+import math
+
 import mlx.core as mx
+import pytest
 
 from omlx.logprobs import extract_token_logprob
 from omlx.request import RequestOutput, TokenLogprob
@@ -11,6 +14,24 @@ LP = mx.array([-3.0, -0.1, -2.0, -5.0, -1.0])
 
 
 class TestExtractTokenLogprob:
+    @pytest.mark.parametrize("dtype", [mx.float16, mx.bfloat16])
+    def test_low_precision_probability_mass(self, dtype):
+        logits = mx.array([32.0, 29.75, 29.5, 27.0], dtype=dtype)
+        logprobs = logits - mx.logsumexp(logits)
+        before = logprobs.tolist()
+
+        full = extract_token_logprob(logprobs, chosen_token_id=0, top_k=4)
+        top = extract_token_logprob(logprobs, chosen_token_id=0, top_k=2)
+        chosen = extract_token_logprob(logprobs, chosen_token_id=0, top_k=0)
+
+        assert sum(math.exp(lp) for lp in full.top_logprobs) == pytest.approx(1.0)
+        assert sum(math.exp(lp) for lp in top.top_logprobs) <= 1.0
+        assert full.top_ids == [0, 1, 2, 3]
+        assert chosen.logprob == top.logprob == full.logprob
+        assert chosen.logprob == full.top_logprobs[0]
+        # Only the returned metadata changes, never the sampler's vector.
+        assert logprobs.tolist() == before
+
     def test_returns_token_logprob_type(self):
         assert isinstance(extract_token_logprob(LP, 1, 2), TokenLogprob)
 

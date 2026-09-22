@@ -27,6 +27,13 @@ def extract_token_logprob(
         A ``TokenLogprob`` with the chosen logprob and the top-K candidates
         sorted by logprob descending.
     """
+    # mlx-lm may normalize in the model's low-precision dtype. Rounding
+    # can leave even the top candidates with total probability above one.
+    # Renormalize the full vector before truncating, without changing sampling.
+    if logprobs_vec.dtype in (mx.float16, mx.bfloat16):
+        logprobs_vec = logprobs_vec.astype(mx.float32)
+        logprobs_vec = logprobs_vec - mx.logsumexp(logprobs_vec)
+
     chosen_lp = float(logprobs_vec[chosen_token_id].item())
 
     top_ids: list[int] = []

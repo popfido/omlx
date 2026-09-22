@@ -63,7 +63,10 @@ from .exceptions import (
     is_cache_corruption_error,
 )
 from .patches.mlx_lm_mtp import prompt_priming as _mtp_priming
-from .patches.mlx_lm_mtp.batch_generator import interrupt_batch_timing
+from .patches.mlx_lm_mtp.batch_generator import (
+    _model_mtp_decode_enabled,
+    interrupt_batch_timing,
+)
 from .patches.sdpa256_attention import set_unfused_headroom_provider
 from .prefill_boundaries import (
     clamp_prefill_chunk_to_boundary,
@@ -11606,7 +11609,9 @@ class Scheduler:
                     # probabilities, so do not expose misleading values.
                     logprobs_unsafe = (
                         isinstance(response, _VLMMTPResponse)
-                        or getattr(self.model, "mtp", None) is not None
+                        # VLM checkpoints retain inactive heads for weight
+                        # loading; only enabled MTP decode is unsafe here.
+                        or _model_mtp_decode_enabled(self.model)
                         # Parser output may combine, hide, or rewrite raw
                         # tokens, so it cannot keep an OpenAI token alignment.
                         or parser_session is not None
