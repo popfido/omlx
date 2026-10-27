@@ -1,5 +1,6 @@
 # Decode Fairness Ratio PR evidence
 
+- [Contribution-guide compliance update and refreshed validation](compliance_update_20261027/README.md)
 - [Full matched AR/MTP report](decode_fair_share_sweep_20261025/REPORT.md)
 - [Protocol reproduction](decode_fair_share_sweep_20261025/REPRODUCE.md)
 - [Earlier vLLM Metal / oMLX TTFT investigation](vllm_metal_comparison_20261023_ttft/REPORT.md)

@@ -1,0 +1,10 @@
+{
+  "feature_head": "c9a7632cca06a7af660c7f6197deb8aebfbf5f6e",
+  "native_kernel_availability": {
+    "attention": false,
+    "lowbit": false,
+    "quant_matmul": false,
+    "sparse_index": false
+  },
+  "measurement_runtime": "Python 3.12; same environment used for baseline and feature"
+}

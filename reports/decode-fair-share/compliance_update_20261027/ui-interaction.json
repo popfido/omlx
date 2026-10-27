@@ -1,0 +1,36 @@
+{
+  "source": "c9a7632cca06a7af660c7f6197deb8aebfbf5f6e",
+  "capture_method": "Actual CUA browser screenshots at each UI interaction; idle holds capped for a short animated walkthrough. No synthetic UI frames.",
+  "states": [
+    {
+      "file": "00.png",
+      "label": "Loaded default 0.5"
+    },
+    {
+      "file": "01.png",
+      "label": "Edited ratio to 0.25"
+    },
+    {
+      "file": "02.png",
+      "label": "Prioritization off retains 0.25"
+    },
+    {
+      "file": "03.png",
+      "label": "Saved disabled ratio"
+    },
+    {
+      "file": "04.png",
+      "label": "After reload: disabled ratio remains 0.25"
+    }
+  ],
+  "display_duration_ms": [
+    1200,
+    3500,
+    3500,
+    3500,
+    2500
+  ],
+  "ratio_after_reload": 0.25,
+  "fairness_after_reload": false,
+  "isolated_empty_model_directory": true
+}

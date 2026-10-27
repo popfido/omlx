@@ -1,0 +1,5 @@
+1:  60d496d3 = 1:  db9b95f1 feat(settings): make decode fairness ratio configurable
+2:  6e3e4df6 = 2:  82ae8923 feat(ui): expose Decode Fairness Ratio in macOS and WebUI
+3:  cf6e6811 = 3:  568638c1 bench: add portable decode fairness ratio tuning harness
+4:  1293e959 = 4:  4e626e9a fix(settings): preserve fairness update logging and reject invalid persisted ratios
+5:  13a36eb1 = 5:  c9a7632c style: follow Black and Ruff for decode fairness settings changes

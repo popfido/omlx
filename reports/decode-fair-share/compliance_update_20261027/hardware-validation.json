@@ -1,0 +1,95 @@
+{
+  "purpose": "Current-source integration validation; short ABBA default comparison plus separate non-default smoke, not a new tuning ranking.",
+  "fresh_servers": 10,
+  "timed_requests": 70,
+  "warmup_requests": 50,
+  "all_structured_checks_passed": true,
+  "inference_dependency_versions": {
+    "mlx": "0.32.4",
+    "mlx-lm": "0.32.3.dev8+g0d4d3d04f",
+    "mlx-vlm": "0.7.10",
+    "transformers": "5.20.2"
+  },
+  "imported_source_version": "0.7.3rc1; identical tracked version modules and all ten server startup banners verified",
+  "distribution_versions_observed": [
+    "0.7.3.dev2",
+    "0.7.3rc1"
+  ],
+  "distribution_metadata_qualification": "The feature checkout retained ignored omlx.egg-info from the app build reporting 0.7.3.dev2; baseline used the venv distribution metadata 0.7.3rc1. Imported paths, commits, tracked version modules and all server banners identify 0.7.3rc1 source in both. Numerical inference dependencies match; raw distribution labels are retained.",
+  "mtp_activation_and_effective_ratio_match_every_arm": true,
+  "all_owned_servers_stopped": true,
+  "resource_guard_abort": false,
+  "model_corpus_and_reference_match_previous_quick_checks": true,
+  "source_identities": {
+    "baseline": {
+      "commit": "e2396c765d274785ce23abb764dc7eaf6b13db11",
+      "harness_sha256": "fa8bbb004da5d8e744ae12e3ba84230b198d12cdd89da9f913ce9dc6c24b27f7",
+      "diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "feature": {
+      "commit": "c9a7632cca06a7af660c7f6197deb8aebfbf5f6e",
+      "harness_sha256": "fa8bbb004da5d8e744ae12e3ba84230b198d12cdd89da9f913ce9dc6c24b27f7",
+      "diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "memory_by_arm": {
+    "01-baseline-ar-0.5": {
+      "minimum_available_gib": 12.816497802734375,
+      "swap_growth_gib": 0.0
+    },
+    "02-baseline-mtp-0.5": {
+      "minimum_available_gib": 11.327529907226562,
+      "swap_growth_gib": 0.0
+    },
+    "03-feature-ar-0.5": {
+      "minimum_available_gib": 12.607406616210938,
+      "swap_growth_gib": 0.0
+    },
+    "04-feature-mtp-0.5": {
+      "minimum_available_gib": 10.623809814453125,
+      "swap_growth_gib": 0.0
+    },
+    "05-feature-mtp-0.5": {
+      "minimum_available_gib": 10.563186645507812,
+      "swap_growth_gib": 0.0
+    },
+    "06-feature-ar-0.5": {
+      "minimum_available_gib": 12.646148681640625,
+      "swap_growth_gib": 0.0
+    },
+    "07-baseline-mtp-0.5": {
+      "minimum_available_gib": 11.157699584960938,
+      "swap_growth_gib": 0.0
+    },
+    "08-baseline-ar-0.5": {
+      "minimum_available_gib": 12.6231689453125,
+      "swap_growth_gib": 0.0
+    },
+    "09-feature-ar-0.1": {
+      "minimum_available_gib": 12.614776611328125,
+      "swap_growth_gib": 0.0
+    },
+    "10-feature-mtp-0.1": {
+      "minimum_available_gib": 11.454498291015625,
+      "swap_growth_gib": 0.0
+    }
+  },
+  "reference": {
+    "copy-256/32": [
+      "5727918f0f8dd4ac1c49f7d857af5efde05ba31e8c681b97567ba27e13033460",
+      32
+    ],
+    "copy-512/16": [
+      "3528cdd74dfdd48f2f063c35754b2f5cb4949ab0a6152c1df252c806606229d5",
+      16
+    ],
+    "copy-2048/16": [
+      "3528cdd74dfdd48f2f063c35754b2f5cb4949ab0a6152c1df252c806606229d5",
+      16
+    ],
+    "copy-512/128": [
+      "81e29634f1f67386833d53330c8ed1d3772440cf090c4284d6ff35147cce3b99",
+      128
+    ]
+  }
+}

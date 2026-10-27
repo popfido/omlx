@@ -1,0 +1,26 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.0, pytest-9.1.1, pluggy-1.7.0
+rootdir: <LOCAL_USER>/.codex/worktrees/singleton-mtp-rope-rebind/omlx
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: asyncio-1.4.1, xdist-3.8.0, anyio-4.15.1, platformdirs-4.13.5
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 670 items
+
+tests/test_settings.py ................................................. [  7%]
+........................................................................ [ 18%]
+........................................................................ [ 28%]
+........................................................................ [ 39%]
+........................................................................ [ 50%]
+...................                                                      [ 53%]
+tests/test_decode_fairness.py .......................................... [ 59%]
+                                                                         [ 59%]
+tests/test_forward_fairness.py ................................          [ 64%]
+tests/test_admin_server_aliases.py ..................................... [ 69%]
+........................................................................ [ 80%]
+............                                                             [ 82%]
+tests/test_prefill_oom_graceful.py ..................................... [ 87%]
+........................................................................ [ 98%]
+.....                                                                    [ 99%]
+apps/omlx-web/tests/test_admin_resource_settings_ui.py .....             [100%]
+
+============================= 670 passed in 11.58s =============================

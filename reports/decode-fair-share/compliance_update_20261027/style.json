@@ -1,0 +1,8 @@
+{
+  "base": "e2396c765d274785ce23abb764dc7eaf6b13db11",
+  "head": "c9a7632cca06a7af660c7f6197deb8aebfbf5f6e",
+  "additional_ruff_diagnostics": [],
+  "changed_line_black_diffs": [],
+  "preexisting_ruff_base": 138,
+  "ruff_feature": 137
+}

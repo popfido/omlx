@@ -1,0 +1,21 @@
+{
+  "base_commit": "e2396c765d274785ce23abb764dc7eaf6b13db11",
+  "feature_commit": "c9a7632cca06a7af660c7f6197deb8aebfbf5f6e",
+  "focused_tests_passed": 670,
+  "full_CI_selection": {
+    "passed": 18404,
+    "skipped": 1190,
+    "failed": 0,
+    "python": "3.12.0",
+    "command": "python -m pytest tests/ apps/omlx-web/tests apps/omlx-mac/Tests/python -m \"not slow and not integration\" -n 3 --dist loadgroup --no-loadscope-reorder"
+  },
+  "native_tests_passed": 24,
+  "standalone_JS_files_passed": 6,
+  "make_app": "passed; isolated Python 3.11 build environment",
+  "make_web": "passed",
+  "range_diff": "All five patches unchanged by clean rebase",
+  "new_Ruff_diagnostics": 0,
+  "new_Black_formatting_diffs": 0,
+  "remote_CI": "Not run; no upstream PR has been opened",
+  "previous_failure": "The older full-suite DeepSeek failure did not occur with the current CI selection and ordering. No claim of a root-cause fix is made."
+}
