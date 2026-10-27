@@ -1,0 +1,14 @@
+{
+  "archive": "source.tar.gz",
+  "sha256": "e17286d30bb9bdc78f54c0e41d73623488f9fd21b89ff45458ed59df2b3ab467",
+  "bytes": 52670149,
+  "source": {
+    "base_pr_head": "04a5be43dc2f91ea2fa0aa26fbbe3a78147bf7c9",
+    "base_version": "0.7.3.dev2",
+    "source": "<LOCAL_TEMP>/omlx-fair-share-fixed-20261025/source",
+    "numeric_patch": "<LOCAL_USER>/workspace/omlx/benchmarks/vllm_metal_comparison_20261023_ttft/decode-fair-share.patch",
+    "patch_sha256": "ebb6250773510333edb2845989b7b05b5674f7527b017f18131169945dfbecab"
+  },
+  "local_patch_copy": "decode-fair-share.patch",
+  "note": "Verified source snapshot plus numeric prototype; no checkpoint weights or Python environment included."
+}

@@ -1,0 +1,12 @@
+{
+  "measured_responses": 8,
+  "correct_reference_responses": 8,
+  "warmup_responses": 20,
+  "measured_arms": 4,
+  "all_measured_resource_guards_clear": true,
+  "minimum_available_gib": 11.905136108398438,
+  "maximum_measured_swap_used_growth_mib": 0.0,
+  "preflight_passed": 353,
+  "failed_setup_attempts": 1,
+  "failed_setup_timed_cases": 0
+}

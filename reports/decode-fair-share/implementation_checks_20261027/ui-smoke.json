@@ -1,0 +1,12 @@
+{
+  "native_apply_persisted": {
+    "decode_fairness": false,
+    "decode_fair_share": 0.25
+  },
+  "web_save_and_reload": {
+    "decode_fairness": false,
+    "decode_fair_share": 0.25,
+    "invalid_ratio_rejected": true,
+    "explicit_context_cap": 32768
+  }
+}

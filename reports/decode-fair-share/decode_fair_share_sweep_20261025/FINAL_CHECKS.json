@@ -1,0 +1,44 @@
+{
+  "arms": 20,
+  "timed_requests": 220,
+  "warmups": 100,
+  "structured_requests": 140,
+  "structured_reference_matches": 140,
+  "natural_requests": 80,
+  "natural_reference_matches": 53,
+  "source_files_verified": 1626,
+  "checkpoint_files_verified": 16,
+  "frozen_measurement_files_verified": 16,
+  "analysis_code_hash_match": true,
+  "all_server_logs_clear": true,
+  "only_expected_model_loaded": true,
+  "no_resource_aborts": true,
+  "minimum_available_gib": 7.863311767578125,
+  "maximum_positive_swap_used_growth_mib": 0.0,
+  "benchmark_processes_stopped": true,
+  "pr_worktree_clean": true,
+  "user_files_and_helper_preserved": true,
+  "near_best_intersections": {
+    "ar": {
+      "complete_conditions": 6,
+      "expected_conditions": 6,
+      "common_best_median": [],
+      "common_within_10_percent": []
+    },
+    "mtp": {
+      "complete_conditions": 6,
+      "expected_conditions": 6,
+      "common_best_median": [],
+      "common_within_10_percent": [
+        "0.75"
+      ]
+    },
+    "all": {
+      "complete_conditions": 12,
+      "expected_conditions": 12,
+      "common_best_median": [],
+      "common_within_10_percent": []
+    }
+  },
+  "material_tradeoff_pairs": 7
+}

@@ -1,0 +1,153 @@
+--- a/omlx/scheduler.py
++++ b/omlx/scheduler.py
+@@ -1882,6 +1882,9 @@
+     # any engine decodes, and each chunk accrues a decode time debt repaid
+     # before the next chunk. Inert while nothing is decoding.
+     decode_fairness: bool = True
++    # Decode seconds reserved after each second of contended prefill.
++    # Lower values favor TTFT over smooth ongoing streams; 0 keeps chunk caps.
++    decode_fair_share: float = _DECODE_FAIR_SHARE
+     # Set by the engine when MoE expert offload wrapped the model.
+     moe_offload_active: bool = False
+ 
+@@ -1922,6 +1925,11 @@
+     # GC/cleanup settings (memory optimization)
+     gc_cleanup_interval: int = 0  # Steps between gc.collect() calls (0=disabled)
+     mlx_cache_cleanup_interval: int = 512  # Steps between mx.clear_cache() calls
++
++    def __post_init__(self) -> None:
++        self.decode_fair_share = float(self.decode_fair_share)
++        if not 0.0 <= self.decode_fair_share <= 1.0:
++            raise ValueError("decode_fair_share must be finite and between 0 and 1")
+ 
+ 
+ @dataclass
+@@ -6319,7 +6327,7 @@
+     def _accrue_decode_debt(self, chunk_seconds: float) -> None:
+         if not self._decode_fairness:
+             return
+-        share = max(0.0, chunk_seconds) * _DECODE_FAIR_SHARE
++        share = max(0.0, chunk_seconds) * self.config.decode_fair_share
+         if share <= 0.0:
+             return
+         if self.running:
+--- a/omlx/settings.py
++++ b/omlx/settings.py
+@@ -349,6 +349,14 @@
+     # any engine decodes, and each chunk accrues a decode time debt repaid
+     # before the next chunk runs. Off restores the pre-fairness behavior.
+     decode_fairness: bool = True
++    # Seconds of decode reserved per second of prefill. Requires server restart.
++    # 0.5 preserves the default; 0 favors TTFT while retaining capped chunks.
++    decode_fair_share: float = 0.5
++
++    def __post_init__(self) -> None:
++        self.decode_fair_share = float(self.decode_fair_share)
++        if not 0.0 <= self.decode_fair_share <= 1.0:
++            raise ValueError("decode_fair_share must be finite and between 0 and 1")
+ 
+     def to_dict(self) -> dict[str, Any]:
+         """Convert to dictionary."""
+@@ -375,6 +383,7 @@
+             chunked_prefill=bool(data.get("chunked_prefill", False)),
+             prefill_priority=prefill_priority,
+             decode_fairness=bool(data.get("decode_fairness", True)),
++            decode_fair_share=data.get("decode_fair_share", 0.5),
+         )
+ 
+ 
+@@ -1948,6 +1957,7 @@
+             chunked_prefill=self.scheduler.chunked_prefill,
+             prefill_speed_priority=(self.scheduler.prefill_priority == "speed"),
+             decode_fairness=self.scheduler.decode_fairness,
++            decode_fair_share=self.scheduler.decode_fair_share,
+             initial_cache_blocks=self.cache.initial_cache_blocks,
+             paged_ssd_cache_dir=str(ssd_dir) if ssd_dir else None,
+             hot_cache_only=self.cache.hot_cache_only,
+--- a/tests/test_settings.py
++++ b/tests/test_settings.py
+@@ -385,6 +385,7 @@
+             "chunked_prefill": False,
+             "prefill_priority": "context",
+             "decode_fairness": True,
++            "decode_fair_share": 0.5,
+         }
+ 
+     def test_decode_fairness_from_dict(self):
+--- /dev/null
++++ b/tests/test_decode_fair_share.py
+@@ -0,0 +1,74 @@
++"""Configurable TTFT/streaming tradeoff, with existing safety policy retained."""
++from unittest.mock import MagicMock
++
++import pytest
++
++from omlx.decode_activity import get_decode_activity
++from omlx.scheduler import Scheduler, SchedulerConfig, _CONTENDED_PREFILL_CHUNK
++from omlx.settings import GlobalSettings, SchedulerSettings
++
++
++@pytest.fixture(autouse=True)
++def quiet_activity():
++    get_decode_activity().clear()
++    yield
++    get_decode_activity().clear()
++
++
++def scheduler(ratio):
++    model = MagicMock()
++    model.layers = []
++    s = Scheduler(model, MagicMock(), SchedulerConfig(
++        decode_fair_share=ratio, paged_cache_block_size=0))
++    s.running = {"decoder": MagicMock()}
++    return s
++
++
++def test_default_reserves_one_second_decode_after_two_seconds_prefill():
++    s = scheduler(SchedulerConfig().decode_fair_share)
++    s._accrue_decode_debt(2.0)
++    s._repay_decode_debt(.9)
++    assert not s._prefill_gate_open()
++    s._repay_decode_debt(.1)
++    assert s._prefill_gate_open()
++
++
++def test_zero_share_opens_gate_but_retains_chunk_cap_and_fairness():
++    s = scheduler(0)
++    s._accrue_decode_debt(2.0)
++    assert s._prefill_gate_open()
++    assert s._decode_fairness
++    assert s._contended_prefill_cap() == _CONTENDED_PREFILL_CHUNK
++
++
++def test_independent_engines_do_not_change_each_others_policy():
++    eager, normal = scheduler(0), scheduler(.5)
++    eager._accrue_decode_debt(2.0)
++    normal._accrue_decode_debt(2.0)
++    assert eager._prefill_gate_open()
++    assert not normal._prefill_gate_open()
++
++
++def test_low_share_preserves_positive_decode_guarantee():
++    s = scheduler(.1)
++    s._accrue_decode_debt(2.0)
++    s._repay_decode_debt(.19)
++    assert not s._prefill_gate_open()
++    s._repay_decode_debt(.02)
++    assert s._prefill_gate_open()
++
++
++def test_setting_survives_serialization_and_reaches_runtime(tmp_path):
++    settings = SchedulerSettings.from_dict({'decode_fair_share': 0})
++    restored = SchedulerSettings.from_dict(settings.to_dict())
++    global_settings = GlobalSettings(base_path=tmp_path, scheduler=restored)
++    global_settings.cache.enabled = False
++    assert global_settings.to_scheduler_config().decode_fair_share == 0
++
++
++@pytest.mark.parametrize('value', [-.1, 1.1, float('nan'), float('inf'), -float('inf')])
++def test_reject_invalid_share(value):
++    with pytest.raises(ValueError):
++        SchedulerSettings.from_dict({'decode_fair_share': value})
++    with pytest.raises(ValueError):
++        SchedulerConfig(decode_fair_share=value)

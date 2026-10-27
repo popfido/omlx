@@ -1,0 +1,24 @@
+{
+  "exploratory": true,
+  "note": "Stock log timestamp compared to client completion; does not isolate delivery cause or exclusive GPU timing.",
+  "rows": [
+    {
+      "arm": "02-mtp-0.5",
+      "stock_finish_elapsed_s": 48.388856172561646,
+      "client_completion_s": 48.40786395827308,
+      "difference_s": 0.019007785711437464
+    },
+    {
+      "arm": "03-mtp-0.25",
+      "stock_finish_elapsed_s": 66.74445700645447,
+      "client_completion_s": 66.87971366662532,
+      "difference_s": 0.13525666017085314
+    },
+    {
+      "arm": "06-mtp-0.75",
+      "stock_finish_elapsed_s": 40.961873054504395,
+      "client_completion_s": 64.10525683313608,
+      "difference_s": 23.143383778631687
+    }
+  ]
+}

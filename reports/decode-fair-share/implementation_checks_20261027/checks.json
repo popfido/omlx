@@ -1,0 +1,33 @@
+{
+  "final_feature_commit": "1293e9591d168ae54cf103eedb4bb2b093b2017e",
+  "base_commit": "891758cf4034b3e4230c11821dc2c1674e57061c",
+  "focused_backend": {
+    "passed": 663
+  },
+  "webui_resource_tests": {
+    "passed": 5
+  },
+  "native_DTO_and_performance_VM": {
+    "passed": 24
+  },
+  "standalone_JS_files": 6,
+  "make_web": "passed",
+  "make_app": "passed with isolated Python 3.11 build environment",
+  "feature_full_default_suite": {
+    "passed": 18244,
+    "failed": 1,
+    "skipped": 1166
+  },
+  "baseline_full_default_suite": {
+    "passed": 18225,
+    "failed": 1,
+    "skipped": 1163
+  },
+  "shared_failure": "tests/test_deepseek_v4_patch.py::TestDeepseekV4CompressedNativeAttention::test_ratio128_dispatch_and_reference_fallbacks",
+  "same_failure_isolated_on_feature": "passed",
+  "baseline_deepseek_file": {
+    "passed": 141,
+    "skipped": 4
+  },
+  "qualification": "Full suites ran before the final POST logging and persisted-invalid-setting tests; the final affected backend suite passed 663 tests afterward. No timed inference path changed after measured commit cf6e6811."
+}
