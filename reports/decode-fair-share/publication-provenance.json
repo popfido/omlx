@@ -31,5 +31,6 @@
     "vllm_metal_comparison_20261023_ttft/REPORT.md": "ad53db9980dd1d9b70e0e4b207fc8d767ff9cc46815a3b6f8c1fa7af5fc95c15",
     "vllm_metal_comparison_20261023_ttft/decode-fair-share.patch": "ebb6250773510333edb2845989b7b05b5674f7527b017f18131169945dfbecab"
   },
-  "normalization": "Redact local paths and mark unpublished dependencies as retained locally. No timing or correctness values changed."
+  "normalization": "Redact local paths and mark unpublished dependencies as retained locally. No timing or correctness values changed.",
+  "integration_csv_line_endings": "LF for Git publication; numeric values unchanged"
 }

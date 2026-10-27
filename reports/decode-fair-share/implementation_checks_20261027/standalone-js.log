@@ -1,0 +1,28 @@
+PASS: Engram toggle reaches the oQ start payload for DeepSeek V4.1 only
+PASS: forced/saved/toggled/other-model modal state and actual PUT payload
+✔ apps/omlx-web/tests/deepseek_v41_offload_ui.test.cjs (131.331792ms)
+✔ apps/omlx-web/tests/hf_repo_id_ui.test.cjs (122.336542ms)
+PASS: offload save/reopen, spec toggle exclusion and fractional resident percentage
+✔ apps/omlx-web/tests/moe_expert_offload_ui.test.cjs (122.459083ms)
+oQ A8 visibility and ANE conflict checks passed
+Lightning MTP adaptive maximum round-trip and fixed-depth reset passed
+qwen4_exp oQ A8 toggle and minimum-token round-trip passed
+✔ apps/omlx-web/tests/qwen_oq_a8_ui.test.cjs (122.508708ms)
+✔ SSD deletion refreshes usage after success (4.104375ms)
+✔ SSD deletion shows the busy or failed-cache message from the API (0.665125ms)
+✔ range and exact model are encoded; unloaded models and intensity remain usable (1.062417ms)
+✔ storage failure removes stale values and displays unavailable state (0.47225ms)
+✔ slower previous selection cannot overwrite newer range (0.415875ms)
+✔ retry/overflow state stays visible alongside committed history (0.437292ms)
+✔ recording switched off shows the settings pointer, not the unavailable warning (0.433292ms)
+✔ compact numbers follow the UI language, not the runtime locale (13.219959ms)
+✔ exact scale applies to usage history counts (0.322625ms)
+✔ number scale survives a page reload (0.490125ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 156.299792
